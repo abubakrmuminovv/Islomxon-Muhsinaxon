@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islomxon & Muhsinaxon - Taklifnoma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --navy: #1D3269; --teal: #1D8A9E; --accent: #B4916B; --bg: #F5FFFF;
+        }
+        body { background-color: var(--bg); font-family: 'Montserrat', sans-serif; color: var(--navy); overflow-x: hidden; }
+        .font-handwritten { font-family: 'Great Vibes', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Envelope Overlay */
+        #overlay {
+            position: fixed; inset: 0; background: #2a417d; z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 1s ease-in-out;
+        }
+        .wax-seal {
+            width: 100px; height: 100px; background: radial-gradient(circle, #d4af37, #B4916B);
+            border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; cursor: pointer; border: 4px solid #c5a059;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        /* Calendar Styling */
+        .calendar-grid { display: grid; grid-template-cols: repeat(7, 1fr); gap: 10px; text-align: center; }
+        .heart-date { position: relative; color: var(--navy); }
+        .heart-date::after {
+            content: '❤'; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: var(--accent);
+            font-size: 2.5rem; opacity: 0.4; z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <h2 class="text-white font-serif italic text-xl mb-4">SIZ TO'YIMIZGA</h2>
+        <h1 class="text-white font-handwritten text-4xl mb-12">taklif etilgansiz</h1>
+        <div class="wax-seal" onclick="startExperience()">OCHISH</div>
+        <p class="text-white/70 mt-12 text-sm tracking-widest uppercase">muhabbat ila,</p>
+        <p class="text-white font-semibold mt-2 uppercase">Islomxon va Muhsinaxon</p>
+    </div>
+
+    <main id="main-content" class="max-w-md mx-auto px-6 py-12 space-y-24 opacity-0 transition-opacity duration-1000">
+        
+        <section class="text-center pt-10">
+            <div class="border-2 border-[#B4916B]/30 p-8 rounded-full inline-block mb-8">
+                <h1 class="font-handwritten text-5xl mb-2">Islomxon</h1>
+                <p class="font-serif italic text-xl">va</p>
+                <h1 class="font-handwritten text-5xl mt-2">Muhsinaxon</h1>
+            </div>
+            <p class="font-serif italic text-[#1D8A9E] mb-1">Quvonchli yangilik:</p>
+            <p class="font-serif italic text-[#1D8A9E]">biz turmush quramiz!</p>
+            <div class="mt-12 animate__animated animate__bounce animate__infinite text-gray-400">
+                <p class="text-xs uppercase tracking-widest">Pastga suring</p>
+                <span>↓</span>
+            </div>
+        </section>
+
+        <section class="text-center space-y-6">
+            <h2 class="font-handwritten text-4xl text-[#1D3269]">Aziz va qadrdon insonimiz!</h2>
+            <p class="text-gray-600 leading-relaxed">
+                Hayotimizdagi eng baxtli kunlardan biri - nikoh to'yimizni siz bilan birga nishonlashni niyat qildik.
+            </p>
+            <p class="text-gray-600">Sizni ushbu kechamizga samimiy taklif etamiz.</p>
+            <p class="text-gray-600 font-semibold italic">
+Quvonchli kunimizda aziz mehmonimiz bo'lishingizni intizorlik bilan kutamiz.
+            </p>
+        </section>
+
+        <section class="text-center">
+            <h2 class="font-handwritten text-4xl mb-8">Aprel, 2026</h2>
+            <div class="calendar-grid text-xs font-bold text-gray-400 mb-4 uppercase">
+                <div>Du</div><div>Se</div><div>Chor</div><div>Pay</div><div>Ju</div><div>Sha</div><div>Ya</div>
+            </div>
+            <div class="calendar-grid font-serif text-lg">
+                <div class="opacity-20">30</div><div class="opacity-20">31</div>
+                <div>1</div><div>2</div><div>3</div><div>4</div>
+                <div class="heart-date font-bold">12</div>
+            </div>
+            <div class="mt-12 flex justify-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/The_White_House_by_William_Strickland%2C_1814.jpg/640px-The_White_House_by_William_Strickland%2C_1814.jpg" 
+                     alt="Venue" class="w-64 grayscale opacity-50 contrast-125">
+            </div>
+        </section>
+
+        <section class="text-center space-y-4">
+            <h2 class="font-handwritten text-4xl">To'y manzili</h2>
+            <p class="font-bold uppercase tracking-widest">QO'QON SHAHRI</p>
+            <p class="text-gray-600">Restoran nomi shu yerga yoziladi</p>
+            
+            <div class="pt-8 space-y-3">
+                <a href="https://yandex.com/maps/?text=Kokand+Uzbekistan" target="_blank" 
+                   class="block border border-[#1D3269] py-3 tracking-widest font-semibold hover:bg-[#1D3269] hover:text-white transition">
+                   YANDEX XARITASI
+                </a>
+                <a href="https://maps.google.com/?q=Kokand+Uzbekistan" target="_blank" 
+                   class="block border border-[#1D3269] py-3 tracking-widest font-semibold hover:bg-[#1D3269] hover:text-white transition">
+                   GOOGLE MAPS
+                </a>
+            </div>
+        </section>
+
+        <section class="text-center bg-white/50 p-8 rounded-xl shadow-inner">
+            <h2 class="font-handwritten text-3xl mb-6">Har lahzani sanayapmiz</h2>
+            <div id="countdown" class="flex justify-center gap-6 text-[#B4916B]">
+                <div><span id="days" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Kun</span></div>
+                <div><span id="hours" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Soat</span></div>
+                <div><span id="minutes" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Daqiqa</span></div>
+                <div><span id="seconds" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Soniya</span></div>
+            </div>
+            <p class="mt-8 italic text-gray-500">Sizni intiqlik bilan kutamiz.</p>
+        </section>
+
+    </main>
+
+    <script>
+        function startExperience() {
+            const overlay = document.getElementById('overlay');
+            const main = document.getElementById('main-content');
+            overlay.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                main.classList.remove('opacity-0');
+                main.classList.add('opacity-100');
+            }, 500);
+        }
+
+        // Timer Logic for April 12, 2026
+        const weddingDate = new Date("April 12, 2026 18:00:00").getTime();
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        }, 1000);
+    </script>
+</body>
+</html>
+
