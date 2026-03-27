@@ -7,50 +7,55 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --navy: #1D3269; --blue: #02A3C0; --accent: #B4916B; --gold: #e6b800; --white: #F5FFFF; }
+        :root { --navy: #1D3269; --blue: #02A3C0; --accent: #B4916B; --white: #F5FFFF; }
         body { background-color: var(--navy); font-family: 'Montserrat', sans-serif; overflow-x: hidden; margin: 0; }
         
         #overlay {
             position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background-image: linear-gradient(135deg, rgba(29, 50, 105, 0.98), rgba(0, 0, 0, 0.8)), 
-                              url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/The_White_House_by_William_Strickland%2C_1814.jpg/640px-The_White_House_by_William_Strickland%2C_1814.jpg'); 
-            background-size: cover; background-position: center; transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            background: linear-gradient(to bottom, #111e42, #1D3269);
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
-        .uzbek-trunk-container { position: relative; width: 340px; height: 240px; perspective: 1500px; cursor: pointer; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6)); animation: subtleFloat 4s ease-in-out infinite; }
-        @keyframes subtleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        /* --- REALISTIC STATIONERY ENVELOPE --- */
+        .envelope-wrapper { position: relative; width: 320px; height: 220px; cursor: pointer; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)); animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .trunk-body { 
-            position: relative; width: 100%; height: 100%; 
-            background: #1e2e5e; border-radius: 4px; z-index: 1; border: 2px solid var(--accent);
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Islamic_geometric_patterns_tiles_Isfahan.jpg/640px-Islamic_geometric_patterns_tiles_Isfahan.jpg');
-            background-size: cover;
+        /* The Envelope Base */
+        .envelope-main { position: absolute; inset: 0; background: #26428f; border-radius: 2px 2px 8px 8px; z-index: 2; overflow: hidden; }
+        .envelope-main::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%); }
+
+        /* The Patterned Flap (Liner) */
+        .flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 160px solid transparent; border-right: 160px solid transparent;
+            border-top: 130px solid var(--blue); /* Outer color */
+            transform-origin: top; transition: transform 0.8s ease; z-index: 5;
         }
         
-        .gold-lock {
-            position: absolute; top: 110px; left: 50%; transform: translateX(-50%); width: 75px; height: 75px;
-            background: radial-gradient(circle, #ffd700, var(--gold)); border-radius: 50%; border: 4px solid var(--accent); z-index: 6;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+        /* The Inner Pattern (Visible when opening) */
+        .flap::after {
+            content: ''; position: absolute; top: -130px; left: -160px; width: 320px; height: 130px;
+            background: url('https://www.transparenttextures.com/patterns/arabesque-thin.png'), var(--accent);
+            clip-path: polygon(0 0, 50% 100%, 100% 0); transform: rotateX(180deg); opacity: 0; transition: 0.4s;
         }
 
-        .trunk-lid {
-            position: absolute; top: 0; left: 0; z-index: 5;
-            width: 0; height: 0; border-left: 170px solid transparent; border-right: 170px solid transparent; border-top: 130px solid var(--blue);
-            transform-origin: top; transition: transform 0.8s ease;
+        .is-open .flap { transform: rotateX(160deg); z-index: 1; }
+        .is-open .flap::after { opacity: 1; }
+
+        .wax-seal {
+            position: absolute; top: 110px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 70px; background: radial-gradient(circle, #e6b800, var(--accent));
+            border-radius: 50%; border: 3px solid #c5a059; z-index: 6;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
+            transition: 0.5s;
         }
+        .is-open .wax-seal { opacity: 0; transform: translateX(-50%) scale(0); }
 
-        .is-open .trunk-lid { transform: rotateX(155deg); z-index: 1; filter: brightness(0.7); }
-        .is-open .gold-lock { opacity: 0; transform: translateX(-50%) scale(0); }
-
-        .font-handwritten { font-family: 'Great Vibes', cursive; }
+        /* --- TYPOGRAPHY --- */
         .font-serif { font-family: 'Playfair Display', serif; }
+        .font-handwritten { font-family: 'Great Vibes', cursive; }
 
-        #mute-btn {
-            position: fixed; top: 20px; right: 20px; z-index: 200;
-            width: 40px; height: 40px; background: rgba(29, 50, 105, 0.8);
-            border-radius: 50%; border: 1px solid var(--accent);
-            display: none; align-items: center; justify-content: center; cursor: pointer; color: white;
-        }
+        #mute-btn { position: fixed; top: 20px; right: 20px; z-index: 200; width: 40px; height: 40px; background: rgba(0,0,0,0.4); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; border: 1px solid var(--accent); }
 
         .heart-date { position: relative; color: var(--navy); font-weight: bold; }
         .heart-date::after { content: '❤'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent); font-size: 2.2rem; opacity: 0.3; z-index: -1; }
@@ -59,85 +64,72 @@
 <body>
 
     <div id="mute-btn" onclick="toggleMute()">
-        <svg id="speaker-on" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-<svg id="speaker-off" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        <svg id="speaker-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+        <svg id="speaker-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
     </div>
 
     <div id="player"></div>
 
     <div id="overlay">
-        <p class="text-white font-serif italic text-xs tracking-widest mb-3 opacity-80">Assalomu aleykum va rohmatullohu va barokatuh</p>
-        <h2 class="text-white font-serif italic text-xl mb-6 tracking-widest uppercase px-6 text-center">SIZNI TO'YIMIZDA KO’RISHDAN</h2>
+        <p class="text-white font-serif italic text-xs tracking-[0.2em] mb-3 uppercase text-center px-4 leading-loose">
+            Assalomu aleykum va rohmatullohu va barokatuh<br>
+            SIZNI TO'YIMIZDA KO’RISHDAN
+        </p>
         <h1 class="font-handwritten text-[var(--accent)] text-5xl mb-12">mamnunmiz!</h1>
 
-        <div class="uzbek-trunk-container" id="invite-box" onclick="openEnvelope(this)">
-            <div class="trunk-lid"></div>
-            <div class="trunk-body"></div>
-            <div class="absolute top-2 left-4 w-[300px] h-[200px] bg-white z-2 rounded-sm opacity-0 transition-opacity duration-500 delay-300 letter">
-                <h3 class="font-handwritten text-navy text-2xl pt-12">Islomxon & Muhsinaxon</h3>
-                <p class="text-[10px] mt-4 text-gray-400 font-bold tracking-widest uppercase">12.04.2026 • 19:00</p>
-            </div>
-            <div class="gold-lock">
-                <span class="font-serif italic font-bold text-white text-xs tracking-wider">OCHISH</span>
+        <div class="envelope-wrapper" id="invite-box" onclick="openEnvelope(this)">
+            <div class="flap"></div>
+            <div class="envelope-main"></div>
+            <div class="wax-seal">
+                <span class="font-serif italic font-bold text-white text-[10px] tracking-widest">OCHISH</span>
             </div>
         </div>
-
-        <p class="text-white/60 mt-20 text-xs uppercase tracking-[0.3em]">Muhabbat ila,</p>
-        <p class="font-handwritten text-[var(--accent)] text-3xl mt-2">Islomxon & Muhsinaxon</p>
+        <p class="text-white/60 mt-16 text-[10px] uppercase tracking-[0.4em]">Islomxon & Muhsinaxon</p>
     </div>
 
     <main id="main-content" class="max-w-md mx-auto px-6 py-12 space-y-24 opacity-0 transition-opacity duration-1000 hidden bg-[var(--white)] rounded-t-3xl shadow-2xl">
-        
         <section class="text-center pt-10 px-6">
             <h1 class="font-handwritten text-6xl mb-6 text-[var(--navy)]">Islomxon & Muhsinaxon</h1>
-            <p class="text-xs text-gray-500 leading-relaxed border-t border-b border-[var(--accent)]/30 py-4 max-w-xs mx-auto">
-                "Alloh ularning qalbini sevgi ila birlashtirdi."<br>
-                <span class="font-bold text-[var(--navy)]">Anfol surasi 63-oyat</span>
+            <p class="text-[10px] text-gray-500 italic border-t border-b border-[var(--accent)]/30 py-4 max-w-xs mx-auto uppercase tracking-widest">
+                "Alloh ularning qalbini sevgi ila birlashtirdi."<br>Anfol surasi 63-oyat
             </p>
         </section>
 
         <section class="text-center space-y-6 px-4">
             <h2 class="font-handwritten text-4xl">Aziz va qadrdon mehmonimiz!</h2>
-            <p class="text-gray-600 italic text-sm">
-                Alloh taolo bizga ato etgan eng go‘zal ne’matlardan biri — nikoh to‘yimizni siz bilan birga o’tkazishni niyat qildik.
-            </p>
-            <p class="text-gray-600 text-sm">Sizni ushbu barakali va quvonchli kechamizga chin qalbdan taklif etamiz.</p>
-            <p class="text-gray-600 font-semibold italic text-sm pt-4">
-                Baxtli kunimizda aziz mehmonimiz bo‘lib, duolaringizni baham ko‘rishingizni intizorlik bilan kutamiz.
-            </p>
+            <p class="text-gray-600 text-sm italic leading-relaxed">Alloh taolo bizga ato etgan eng go‘zal ne’matlardan biri — nikoh to‘yimizni siz bilan birga o’tkazishni niyat qildik.</p>
         </section>
 
         <section class="text-center">
             <h2 class="font-handwritten text-4xl mb-8 text-[var(--navy)]">Aprel, 2026</h2>
-            <div class="grid grid-cols-7 text-[10px] font-bold text-gray-400 mb-4 uppercase px-6">
+            <div class="grid grid-cols-7 text-[10px] font-bold text-gray-400 mb-4 px-6 uppercase tracking-tighter">
                 <div>Du</div><div>Se</div><div>Chor</div><div>Pay</div><div>Ju</div><div>Sha</div><div>Ya</div>
             </div>
-            <div class="grid grid-cols-7 font-serif text-lg items-center px-6">
+            <div class="grid grid-cols-7 font-serif text-lg px-6">
                 <div class="opacity-10">30</div><div class="opacity-10">31</div>
                 <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
                 <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
                 <div class="heart-date">12</div>
             </div>
 
-            <div class="mt-12 mb-4">
+            <div class="mt-12">
                 <h3 class="font-handwritten text-2xl text-[var(--navy)]">Har lahzani sanayapmiz</h3>
-                <div id="countdown" class="flex justify-center gap-6 mt-4 font-serif text-3xl text-[var(--accent)]">
-                  <div><span id="days">00</span><p class="text-[9px] uppercase text-gray-400">Kun</p></div>
-                    <div><span id="hours">00</span><p class="text-[9px] uppercase text-gray-400">Soat</p></div>
-                    <div><span id="minutes">00</span><p class="text-[9px] uppercase text-gray-400">Daqiqa</p></div>
-                    <div><span id="seconds">00</span><p class="text-[9px] uppercase text-gray-400">Sekund</p></div>
+                <div id="countdown" class="flex justify-center gap-4 mt-6 font-serif text-3xl text-[var(--accent)]">
+                    <div><span id="days">00</span><p class="text-[8px] uppercase tracking-widest text-gray-400">Kun</p></div>
+                    <div><span id="hours">00</span><p class="text-[8px] uppercase tracking-widest text-gray-400">Soat</p></div>
+                    <div><span id="minutes">00</span><p class="text-[8px] uppercase tracking-widest text-gray-400">Daqiqa</p></div>
+                    <div><span id="soniya">00</span><p class="text-[8px] uppercase tracking-widest text-gray-400">Soniya</p></div>
                 </div>
             </div>
-            <p class="text-sm text-gray-600 italic">Sana: <span class="font-bold">12 APREL</span> | Soat: <span class="font-bold">19:00</span></p>
-            <p class="text-xs text-gray-400 mt-1">Shom namozidan so‘ng</p>
+            <p class="mt-10 text-xs text-gray-500 uppercase tracking-widest">12 Aprel | 19:00</p>
+            <p class="text-[10px] text-gray-400 mt-2">Shom namozidan so‘ng</p>
         </section>
 
         <section class="text-center space-y-4 pb-20 px-8">
-            <h2 class="font-handwritten text-4xl text-[var(--navy)]">To'y manzili</h2>
-            <p class="font-bold tracking-widest text-sm uppercase">XALQ 3 TO‘YXONASI, QO'QON SHAHRI</p>
+            <h2 class="font-handwritten text-4xl text-[var(--navy)]">To'y manzili</h2><p class="font-bold tracking-widest text-[10px] uppercase text-gray-700">QO'QON SHAHRI, XALQ 3 TO‘YXONASI</p>
             <div class="pt-8 space-y-3 px-10">
-                <a href="https://yandex.com/maps/-/CPVcZYJ6" target="_blank" class="block border border-[var(--navy)] py-3 text-xs tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition uppercase">YANDEX XARITASI</a>
-                <a href="https://maps.app.goo.gl/WRtNcMEiq9s48VX56?g_st=ipc" target="_blank" class="block border border-[var(--navy)] py-3 text-xs tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition uppercase">GOOGLE MAPS</a>
+                <a href="https://yandex.com/maps/-/CPVcZYJ6" target="_blank" class="block border border-[var(--navy)] py-3 text-[10px] tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition uppercase">Yandex Xaritasi</a>
+                <a href="https://maps.app.goo.gl/WRtNcMEiq9s48VX56?g_st=ipc" target="_blank" class="block border border-[var(--navy)] py-3 text-[10px] tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition uppercase">Google Maps</a>
             </div>
         </section>
     </main>
@@ -150,18 +142,13 @@
 
         var player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0', width: '0',
-                videoId: 'ivrumxRUz_Y',
-                playerVars: { 'autoplay': 0, 'controls': 0, 'enablejsapi': 1 },
-            });
+            player = new YT.Player('player', { height: '0', width: '0', videoId: 'ivrumxRUz_Y', playerVars: { 'enablejsapi': 1 } });
         }
 
         function openEnvelope(el) {
             el.classList.add('is-open');
             if(player) player.playVideo();
             document.getElementById('mute-btn').style.display = 'flex';
-            
             setTimeout(() => {
                 document.getElementById('overlay').style.transform = 'translateY(-100%)';
                 document.getElementById('main-content').classList.remove('hidden');
@@ -170,15 +157,9 @@
         }
 
         function toggleMute() {
-            var onIcon = document.getElementById('speaker-on');
-            var offIcon = document.getElementById('speaker-off');
-            if (player.isMuted()) {
-                player.unMute();
-                onIcon.classList.remove('hidden'); offIcon.classList.add('hidden');
-            } else {
-                player.mute();
-                onIcon.classList.add('hidden'); offIcon.classList.remove('hidden');
-            }
+            var on = document.getElementById('speaker-on'); var off = document.getElementById('speaker-off');
+            if (player.isMuted()) { player.unMute(); on.classList.remove('hidden'); off.classList.add('hidden'); }
+            else { player.mute(); on.classList.add('hidden'); off.classList.remove('hidden'); }
         }
 
         const weddingDate = new Date("April 12, 2026 19:00:00").getTime();
@@ -188,7 +169,7 @@
             document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("soniya").innerText = Math.floor((distance % (1000 * 60)) / 1000);
         }, 1000);
     </script>
 </body>
