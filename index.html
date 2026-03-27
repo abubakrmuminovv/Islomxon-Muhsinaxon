@@ -1,151 +1,127 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islomxon & Muhsinaxon - Taklifnoma</title>
+    <title>Islomxon & Muhsinaxon Taklifnomasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root {
-            --navy: #1D3269; --teal: #1D8A9E; --accent: #B4916B; --bg: #F5FFFF;
+        :root { --navy: #1D3269; --blue: #02A3C0; --accent: #B4916B; --white: #F5FFFF; }
+        body { background-color: var(--white); font-family: 'Montserrat', sans-serif; overflow-x: hidden; margin: 0; color: var(--navy); }
+        
+        /* 3D ENVELOPE OVERLAY */
+        #overlay {
+            position: fixed; inset: 0; background: radial-gradient(circle, #2a417d, var(--navy)); z-index: 100;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
         }
-        body { background-color: var(--bg); font-family: 'Montserrat', sans-serif; color: var(--navy); overflow-x: hidden; }
+        .container { position: relative; width: 320px; height: 220px; perspective: 1000px; cursor: pointer; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.5)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .envelope { position: relative; width: 100%; height: 100%; background: #233975; border-radius: 0 0 10px 10px; z-index: 1; }
+        .envelope::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 110px solid #2e4a9e; z-index: 4; }
+        .envelope::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 110px solid transparent; border-bottom: 110px solid transparent; border-left: 160px solid #28438f; z-index: 3; }
+        .lid { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-top: 120px solid var(--blue); transform-origin: top; transition: transform 0.8s ease; z-index: 5; }
+        .wax-seal { position: absolute; top: 100px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; background: radial-gradient(circle, #e6b800, var(--accent)); border-radius: 50%; border: 3px solid #c5a059; z-index: 6; box-shadow: 0 5px 15px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
+        
+        /* Letter sticking out inside */
+        .letter { position: absolute; top: 10px; left: 15px; width: 290px; height: 180px; background: white; z-index: 2; transition: 0.8s; padding: 20px; text-align: center; }
+        .opened .lid { transform: rotateX(150deg); z-index: 1; }
+        .opened .wax-seal { opacity: 0; transform: translateX(-50%) scale(0); }
+        .opened .letter { transform: translateY(-60px); }
+
+        /* TYPOGRAPHY AND UI ELEMENTS */
         .font-handwritten { font-family: 'Great Vibes', cursive; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        
-        /* Envelope Overlay */
-        #overlay {
-            position: fixed; inset: 0; background: #2a417d; z-index: 100;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: transform 1s ease-in-out;
-        }
-        .wax-seal {
-            width: 100px; height: 100px; background: radial-gradient(circle, #d4af37, #B4916B);
-            border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold; cursor: pointer; border: 4px solid #c5a059;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
-        /* Calendar Styling */
-        .calendar-grid { display: grid; grid-template-cols: repeat(7, 1fr); gap: 10px; text-align: center; }
-        .heart-date { position: relative; color: var(--navy); }
-        .heart-date::after {
-            content: '❤'; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); color: var(--accent);
-            font-size: 2.5rem; opacity: 0.4; z-index: -1;
-        }
+        .heart-date { position: relative; color: var(--navy); font-weight: bold; }
+        .heart-date::after { content: '❤'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--accent); font-size: 2.2rem; opacity: 0.3; z-index: -1; }
     </style>
 </head>
 <body>
 
+    <iframe id="nasheed" width="0" height="0" src="https://www.youtube.com/embed/ivrumxRUz_Y?enablejsapi=1" frameborder="0" allow="autoplay"></iframe>
+
     <div id="overlay">
-        <h2 class="text-white font-serif italic text-xl mb-4">SIZ TO'YIMIZGA</h2>
-        <h1 class="text-white font-handwritten text-4xl mb-12">taklif etilgansiz</h1>
-        <div class="wax-seal" onclick="startExperience()">OCHISH</div>
-        <p class="text-white/70 mt-12 text-sm tracking-widest uppercase">muhabbat ila,</p>
-        <p class="text-white font-semibold mt-2 uppercase">Islomxon va Muhsinaxon</p>
+        <p class="text-white text-xs tracking-widest mb-2">Assalomu aleykum va rohmatullohu va barokatuh</p>
+        <h2 class="text-white font-serif italic text-xl mb-4 tracking-widest uppercase">SIZNI TO'YIMIZDA KO’RISHDAN</h2>
+        <h1 class="font-handwritten text-[var(--accent)] text-5xl mb-12">mamnunmiz!</h1>
+
+        <div class="container" id="invite-box" onclick="openEnvelope()">
+            <div class="lid"></div>
+            <div class="envelope"></div>
+            <div class="letter shadow-lg">
+                <h3 class="font-handwritten text-navy text-2xl">Islomxon & Muhsinaxon</h3>
+                <p class="text-[10px] mt-4 text-gray-400 font-bold tracking-widest uppercase">12.04.2026 • 18:00</p>
+            </div>
+            <div class="wax-seal">
+                <span class="font-serif italic font-bold text-white text-xs tracking-wider">OCHISH</span>
+            </div>
+        </div>
+
+        <p class="text-white/60 mt-16 text-xs uppercase tracking-[0.3em]">Muhabbat ila,</p>
+        <p class="font-handwritten text-[var(--accent)] text-3xl mt-2">Islomxon & Muhsinaxon</p>
     </div>
 
-    <main id="main-content" class="max-w-md mx-auto px-6 py-12 space-y-24 opacity-0 transition-opacity duration-1000">
+    <main id="main-content" class="max-w-md mx-auto px-6 py-12 space-y-24 opacity-0 transition-opacity duration-1000 hidden">
         
         <section class="text-center pt-10">
-            <div class="border-2 border-[#B4916B]/30 p-8 rounded-full inline-block mb-8">
-                <h1 class="font-handwritten text-5xl mb-2">Islomxon</h1>
-                <p class="font-serif italic text-xl">va</p>
-                <h1 class="font-handwritten text-5xl mt-2">Muhsinaxon</h1>
-            </div>
-            <p class="font-serif italic text-[#1D8A9E] mb-1">Quvonchli yangilik:</p>
-            <p class="font-serif italic text-[#1D8A9E]">biz turmush quramiz!</p>
-            <div class="mt-12 animate__animated animate__bounce animate__infinite text-gray-400">
-                <p class="text-xs uppercase tracking-widest">Pastga suring</p>
-                <span>↓</span>
-            </div>
+            <h1 class="font-handwritten text-6xl mb-6 text-[var(--navy)]">Islomxon & Muhsinaxon</h1>
+            <p class="text-xs text-gray-500 max-w-xs mx-auto leading-relaxed border-t border-b border-[var(--accent)]/30 py-4">
+                "Alloh ularning qalbini sevgi ila birlashtirdi."<br>
+                <span class="font-bold text-[var(--navy)]">Anfol surasi 63-oyat</span>
+            </p>
         </section>
 
-        <section class="text-center space-y-6">
-            <h2 class="font-handwritten text-4xl text-[#1D3269]">Aziz va qadrdon insonimiz!</h2>
-            <p class="text-gray-600 leading-relaxed">
-                Hayotimizdagi eng baxtli kunlardan biri - nikoh to'yimizni siz bilan birga nishonlashni niyat qildik.
+        <section class="text-center space-y-6 px-4">
+            <h2 class="font-handwritten text-4xl">Aziz va qadrdon mehmonimiz!</h2>
+            <p class="text-gray-600 leading-relaxed italic text-sm">
+                Alloh taolo bizga ato etgan eng go‘zal ne’matlardan biri — nikoh to‘yimizni siz bilan birga o’tkazishni niyat qildik.
             </p>
-            <p class="text-gray-600">Sizni ushbu kechamizga samimiy taklif etamiz.</p>
-            <p class="text-gray-600 font-semibold italic">
-Quvonchli kunimizda aziz mehmonimiz bo'lishingizni intizorlik bilan kutamiz.
+            <p class="text-gray-600 text-sm">Sizni ushbu barakali va quvonchli kechamizga chin qalbdan taklif etamiz.</p>
+            <p class="text-gray-600 leading-relaxed font-semibold italic text-sm">
+                Baxtli kunimizda aziz mehmonimiz bo‘lib, biz bilan birga duolaringizni baham ko‘rishingizni intizorlik bilan kutamiz.
             </p>
         </section>
 
         <section class="text-center">
             <h2 class="font-handwritten text-4xl mb-8">Aprel, 2026</h2>
-            <div class="calendar-grid text-xs font-bold text-gray-400 mb-4 uppercase">
+            <div class="grid grid-cols-7 text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest">
                 <div>Du</div><div>Se</div><div>Chor</div><div>Pay</div><div>Ju</div><div>Sha</div><div>Ya</div>
             </div>
-            <div class="calendar-grid font-serif text-lg">
-                <div class="opacity-20">30</div><div class="opacity-20">31</div>
-                <div>1</div><div>2</div><div>3</div><div>4</div>
-                <div class="heart-date font-bold">12</div>
+            <div class="grid grid-cols-7 font-serif text-lg items-center">
+                <div class="opacity-10">30</div><div class="opacity-10">31</div>
+                <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div>
+                <div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
+                <div class="heart-date">12</div>
             </div>
-            <div class="mt-12 flex justify-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/The_White_House_by_William_Strickland%2C_1814.jpg/640px-The_White_House_by_William_Strickland%2C_1814.jpg" 
-                     alt="Venue" class="w-64 grayscale opacity-50 contrast-125">
-            </div>
+            <p class="mt-8 font-serif italic text-[var(--navy)]">Sana: <span class="font-bold">12 APREL</span></p>
+            <p class="text-sm text-gray-500">Soat: <span class="font-bold">18:00</span> (Shom namozidan keyin)</p>
         </section>
 
-        <section class="text-center space-y-4">
+        <section class="text-center space-y-4 pb-20">
             <h2 class="font-handwritten text-4xl">To'y manzili</h2>
-            <p class="font-bold uppercase tracking-widest">QO'QON SHAHRI</p>
-            <p class="text-gray-600">Restoran nomi shu yerga yoziladi</p>
-            
-            <div class="pt-8 space-y-3">
-                <a href="https://yandex.com/maps/?text=Kokand+Uzbekistan" target="_blank" 
-                   class="block border border-[#1D3269] py-3 tracking-widest font-semibold hover:bg-[#1D3269] hover:text-white transition">
-                   YANDEX XARITASI
-                </a>
-                <a href="https://maps.google.com/?q=Kokand+Uzbekistan" target="_blank" 
-                   class="block border border-[#1D3269] py-3 tracking-widest font-semibold hover:bg-[#1D3269] hover:text-white transition">
-                   GOOGLE MAPS
-                </a>
+            <p class="font-bold tracking-widest text-xs">QO'QON SHAHRI</p>
+            <p class="text-sm text-gray-600">Xalq 3 to‘yxonasi</p>
+            <div class="pt-8 space-y-3 px-10">
+                <a href="https://yandex.com/maps/-/CPVcZYJ6" target="_blank" class="block border border-[var(--navy)] py-3 text-xs tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition">YANDEX XARITASI</a>
+                <a href="https://maps.app.goo.gl/WRtNcMEiq9s48VX56?g_st=ipc" target="_blank" class="block border border-[var(--navy)] py-3 text-xs tracking-widest font-semibold hover:bg-[var(--navy)] hover:text-white transition">GOOGLE MAPS</a>
             </div>
         </section>
-
-        <section class="text-center bg-white/50 p-8 rounded-xl shadow-inner">
-            <h2 class="font-handwritten text-3xl mb-6">Har lahzani sanayapmiz</h2>
-            <div id="countdown" class="flex justify-center gap-6 text-[#B4916B]">
-                <div><span id="days" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Kun</span></div>
-                <div><span id="hours" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Soat</span></div>
-                <div><span id="minutes" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Daqiqa</span></div>
-                <div><span id="seconds" class="block text-3xl font-serif">00</span><span class="text-[10px] uppercase">Soniya</span></div>
-            </div>
-            <p class="mt-8 italic text-gray-500">Sizni intiqlik bilan kutamiz.</p>
-        </section>
-
     </main>
 
     <script>
-        function startExperience() {
-            const overlay = document.getElementById('overlay');
-            const main = document.getElementById('main-content');
-            overlay.style.transform = 'translateY(-100%)';
+        function openEnvelope() {
+            document.getElementById('invite-box').classList.add('opened');
+            
+            // Trigger Music Autoplay
+            const iframe = document.getElementById('nasheed');
+            iframe.src += "&autoplay=1";
             setTimeout(() => {
-                main.classList.remove('opacity-0');
-                main.classList.add('opacity-100');
-            }, 500);
+                document.getElementById('overlay').style.transform = 'translateY(-100%)';
+                document.getElementById('main-content').classList.remove('hidden');
+                setTimeout(() => document.getElementById('main-content').classList.add('opacity-100'), 100);
+            }, 1200);
         }
-
-        // Timer Logic for April 12, 2026
-        const weddingDate = new Date("April 12, 2026 18:00:00").getTime();
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
-        }, 1000);
     </script>
 </body>
 </html>
-
